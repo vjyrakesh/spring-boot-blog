@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.rkasibha.blog.models.Comment;
 import com.rkasibha.blog.models.Post;
 import com.rkasibha.blog.repository.PostRepository;
 
@@ -38,6 +39,16 @@ public class PostController {
 			return new ResponseEntity<Post>(post.get(), HttpStatus.OK);
 		} else {
 			return new ResponseEntity<Post>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@RequestMapping(value="api/v1/posts/{id}/comments", method=RequestMethod.GET)
+	public ResponseEntity<List<Comment>> getCommentsForPostById(@PathVariable("id") Integer id) {
+		Optional<Post> post = postRepository.findById(id);
+		if(post.isPresent()) {
+			return new ResponseEntity<List<Comment>>(post.get().getComments(), HttpStatus.OK);
+		} else {
+			return new ResponseEntity<List<Comment>>(HttpStatus.NOT_FOUND);
 		}
 	}
 }
